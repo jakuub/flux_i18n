@@ -1,0 +1,12 @@
+name: flux_i18n
+description: A sample web application
+dependencies:
+  browser: any
+  flux:
+    git: https://github.com/jakuub/flux.git
+  tiles: any
+  vacuum_persistent:
+    git: https://github.com/vacuumlabs/persistent.git
+dev_dependencies:
+  mock: any
+  unittest: any
