@@ -31,7 +31,7 @@ class LocalizedComponent extends Component<PersistentMap> {
   /**
    * Helper for easier usage
    */
-  String _(String key, {bool global: false}) => locate(key, global: global);
+  String l(String key, {bool global: false}) => locate(key, global: global);
 
   @override
   Props createProps(PersistentMap data, {String name}) {

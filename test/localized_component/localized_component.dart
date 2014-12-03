@@ -58,6 +58,10 @@ main() {
       expect(component.locate("not existing"), isNull);
     });
 
+    test("should have shortcut l for method locate", () {
+      expect(component.l("translationkey"), equals(component.locate("translationkey")));
+    });
+
     test("should have function createProps which work with inner data", () {
       Props props = component.createProps(innerData);
       expect(props.data.get(DATA), equals(innerData));
