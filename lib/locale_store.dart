@@ -21,7 +21,8 @@ class LocaleStore extends Store<PersistentMap> {
         this.paths = paths != null ? paths : [] {
     insert(["locale"], defaultLocale);
     listen({
-      LOCALELOADED: localeLoaded
+      LOCALELOADED: localeLoaded,
+      LOCALE_CHANGE: localeChange
     });
     loadLocale(defaultLocale);
   }
@@ -52,6 +53,10 @@ class LocaleStore extends Store<PersistentMap> {
   localeLoaded(PersistentMap event) {
 
     this.setData(_merge(data, parseLocaleMap(event.get(DATA))));
+  }
+  
+  localeChange(PersistentMap event) {
+    this.locale = lookupIn(event, [DATA]);
   }
 
 }
