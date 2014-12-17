@@ -132,12 +132,12 @@ main() {
       
       store.setData(locale);
 
-      expect(store.getLocale("nested"), equals(nestedLocale));
+      expect(store.getLocale("nested").get("key"), equals("other"));
     });
 
     test("should have method getLocale which parse . in string", () {
       PersistentMap nestedLocale2 = persist({
-        "key": "other",
+        "key": "nested2value",
         "key2": "nestedValue2"
       });       
       PersistentMap nestedLocale = persist({
@@ -153,29 +153,43 @@ main() {
       
       store.setData(locale);
 
-      expect(store.getLocale("nested.nested2"), equals(nestedLocale2));
+      expect(store.getLocale("nested.nested2").get("key"), equals("nested2value"));
     });
 
-    test("should return null when method getLocale don't found locale", () {
+    test("should return only global when method getLocale don't found locale", () {
       PersistentMap locale = persist({
         "key2": "value2",
         "key": "otherValue",
+        "global": {
+          "globalkey": "globalValue"
+        }
       }); 
       
       store.setData(locale);
 
-      expect(store.getLocale("nested"), isNull);
+      expect(lookupIn(store.getLocale("nested"), ["global", "globalkey"]), equals("globalValue"));
     });
 
-    test("should return null when method getLocale don't found nested.nested locale", () {
+    test("should add global to locale got by getLocale", () {
+      PersistentMap global = persist({
+        "global": "other",
+        "global2": "nestedValue2",
+      });       
+      PersistentMap nested = persist({
+        "nested": "other",
+        "nested2": "nestedValue2",
+      });       
       PersistentMap locale = persist({
         "key2": "value2",
         "key": "otherValue",
+        "nested": nested,
+        "global": global
       }); 
       
       store.setData(locale);
 
-      expect(store.getLocale("nested.nested"), isNull);
+      expect(store.getLocale("nested").hasKey("global"), isTrue);
+      
     });
 
   });

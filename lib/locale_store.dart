@@ -61,12 +61,19 @@ class LocaleStore extends Store<PersistentMap> {
 
   getLocale(String path) {
     List pathList = path.split(".");
-    for (num i = 0; i < pathList.length; ++i) {
+    PersistentMap locale = null; 
+    
+    for (num i = 0; i <= pathList.length; ++i) {
       if (lookupIn(data, pathList.sublist(0, i), notFound: null) == null) {
-        return null;
+        locale = per({}); //found null on path, create empty locale
       }
     }
-    return lookupIn(data, pathList, notFound: null);
+    
+    if (locale == null) {
+      locale = lookupIn(data, pathList);
+    }
+    
+    return insertIn(locale, [GLOBAL], lookupIn(data, [GLOBAL], notFound: null));
   }
 }
 
