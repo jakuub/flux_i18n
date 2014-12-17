@@ -118,6 +118,65 @@ main() {
         DATA: "sk"
       }));
     });
+    
+    test("should have method getLocale", () {
+      PersistentMap nestedLocale = persist({
+        "key": "other",
+        "key2": "nestedValue2"
+      });       
+      PersistentMap locale = persist({
+        "key2": "value2",
+        "key": "otherValue",
+        "nested": nestedLocale
+      }); 
+      
+      store.setData(locale);
+
+      expect(store.getLocale("nested"), equals(nestedLocale));
+    });
+
+    test("should have method getLocale which parse . in string", () {
+      PersistentMap nestedLocale2 = persist({
+        "key": "other",
+        "key2": "nestedValue2"
+      });       
+      PersistentMap nestedLocale = persist({
+        "key": "other",
+        "key2": "nestedValue2",
+        "nested2": nestedLocale2
+      });       
+      PersistentMap locale = persist({
+        "key2": "value2",
+        "key": "otherValue",
+        "nested": nestedLocale
+      }); 
+      
+      store.setData(locale);
+
+      expect(store.getLocale("nested.nested2"), equals(nestedLocale2));
+    });
+
+    test("should return null when method getLocale don't found locale", () {
+      PersistentMap locale = persist({
+        "key2": "value2",
+        "key": "otherValue",
+      }); 
+      
+      store.setData(locale);
+
+      expect(store.getLocale("nested"), isNull);
+    });
+
+    test("should return null when method getLocale don't found nested.nested locale", () {
+      PersistentMap locale = persist({
+        "key2": "value2",
+        "key": "otherValue",
+      }); 
+      
+      store.setData(locale);
+
+      expect(store.getLocale("nested.nested"), isNull);
+    });
 
   });
 }

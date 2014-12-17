@@ -59,6 +59,15 @@ class LocaleStore extends Store<PersistentMap> {
     this.locale = lookupIn(event, [DATA]);
   }
 
+  getLocale(String path) {
+    List pathList = path.split(".");
+    for (num i = 0; i < pathList.length; ++i) {
+      if (lookupIn(data, pathList.sublist(0, i), notFound: null) == null) {
+        return null;
+      }
+    }
+    return lookupIn(data, pathList, notFound: null);
+  }
 }
 
 dynamic _merge(dynamic data, dynamic newData) {
