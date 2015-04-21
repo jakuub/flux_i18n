@@ -5,12 +5,12 @@ import "package:vacuum_persistent/persistent.dart";
 import 'loader.dart';
 import 'common.dart';
 
-class LocaleStore extends Store<PersistentMap> {
+class LocaleStore extends Store<PersistentIndexedCollection> {
 
   final Loader loader;
   final List<String> paths;
   final String root;
-  String get locale => data.get("locale", null);
+  String get locale => lookupIn(data, ["locale"]);
   set locale(loc) {
     loadLocale(loc);
     insert(["locale"], loc);
@@ -27,18 +27,18 @@ class LocaleStore extends Store<PersistentMap> {
     loadLocale(defaultLocale);
   }
 
-  PersistentMap parseLocaleMap(PersistentMap localeMap) {
-    PersistentMap result = persist({});
+  PersistentIndexedCollection parseLocaleMap(PersistentIndexedCollection localeMap) {
+    PersistentIndexedCollection result = persist({});
 
-    localeMap.asTransient().forEach((Pair pair) {
-      String key = pair.first;
+    localeMap.forEach((Pair pair) {
+      String key = pair.fst;
       List path = key.split(".");
       for (num i = 0; i < path.length; ++i) {
         if (lookupIn(result, path.sublist(0, i), notFound: null) == null) {
           result = insertIn(result, path.sublist(0, i), persist({}));
         }
       }
-      result = insertIn(result, path, pair.second);
+      result = insertIn(result, path, pair.snd);
     });
 
     return result;
@@ -50,18 +50,18 @@ class LocaleStore extends Store<PersistentMap> {
     });
   }
 
-  localeLoaded(PersistentMap event) {
+  localeLoaded(PersistentIndexedCollection event) {
 
     this.setData(_merge(data, parseLocaleMap(event.get(DATA))));
   }
   
-  localeChange(PersistentMap event) {
+  localeChange(PersistentIndexedCollection event) {
     this.locale = lookupIn(event, [DATA]);
   }
 
   getLocale(String path) {
     List pathList = path.split(".");
-    PersistentMap locale = null; 
+    PersistentIndexedCollection locale = null; 
     
     for (num i = 0; i <= pathList.length; ++i) {
       if (lookupIn(data, pathList.sublist(0, i), notFound: null) == null) {
@@ -78,16 +78,16 @@ class LocaleStore extends Store<PersistentMap> {
 }
 
 dynamic _merge(dynamic data, dynamic newData) {
-  if (!(newData is PersistentMap) || data == null || !(data is PersistentMap)) {
+  if (!(newData is PersistentIndexedCollection) || data == null || !(data is PersistentIndexedCollection)) {
 
     return newData;
 
   }
 
-  PersistentMap result = data;
+  PersistentIndexedCollection result = data;
 
   newData.forEach((Pair pair) {
-    result = insertIn(result, [pair.first], _merge(result.get(pair.first, null), pair.second));
+    result = insertIn(result, [pair.fst], _merge(lookupIn(result, [pair.fst]), pair.snd));
   });
 
 

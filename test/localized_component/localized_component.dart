@@ -11,9 +11,9 @@ main() {
   group("(LocalizedComponent)", () {
 
     LocalizedComponent component;
-    PersistentMap innerData;
-    PersistentMap locale;
-    PersistentMap data;
+    PersistentIndexedCollection innerData;
+    PersistentIndexedCollection locale;
+    PersistentIndexedCollection data;
     DispatcherMock dispatcher;
 
     setUp(() {

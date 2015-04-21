@@ -4,14 +4,14 @@ import 'package:flux/component.dart';
 import 'package:vacuum_persistent/persistent.dart';
 import 'common.dart';
 
-class LocalizedComponent extends Component<PersistentMap> {
+class LocalizedComponent extends Component<PersistentIndexedCollection> {
 
   @override
-  PersistentMap get data => lookupIn(super.data, [DATA]);
+  PersistentIndexedCollection get data => lookupIn(super.data, [DATA]);
 
-  PersistentMap get locale => lookupIn(super.data, [LOCALE]);
+  PersistentIndexedCollection get locale => lookupIn(super.data, [LOCALE]);
 
-  LocalizedComponent(Props<PersistentMap> props, [children]) : super(props, children);
+  LocalizedComponent(Props<PersistentIndexedCollection> props, [children]) : super(props, children);
 
   String locate(String key, {bool global: false}) {
 
@@ -34,7 +34,7 @@ class LocalizedComponent extends Component<PersistentMap> {
   String l(String key, {bool global: false}) => locate(key, global: global);
 
   @override
-  Props createProps(PersistentMap data, {String name}) {
+  Props createProps(PersistentIndexedCollection data, {String name}) {
     return super.createProps(persist({
       DATA: data,
       LOCALE: _chooseLocale(name),
@@ -42,9 +42,9 @@ class LocalizedComponent extends Component<PersistentMap> {
   }
 
   @override
-  Props cp(PersistentMap data, {String name}) => createProps(data, name: name);
+  Props cp(PersistentIndexedCollection data, {String name}) => createProps(data, name: name);
 
-  PersistentMap _chooseLocale(String name) {
+  PersistentIndexedCollection _chooseLocale(String name) {
     if (name != null) {
       return insertIn(lookupIn(locale, [name], notFound: persist({})), [GLOBAL], lookupIn(locale, [GLOBAL], notFound: persist({})));
     }

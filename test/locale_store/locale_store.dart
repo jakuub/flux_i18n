@@ -37,7 +37,7 @@ main() {
     });
 
     test("should parse map with keys with . to nested map", () {
-      PersistentMap nested = store.parseLocaleMap(persist({
+      PersistentIndexedCollection nested = store.parseLocaleMap(persist({
         "key1.key2": "value",
         "key1.key3": "value2"
       }));
@@ -120,11 +120,11 @@ main() {
     });
     
     test("should have method getLocale", () {
-      PersistentMap nestedLocale = persist({
+      PersistentIndexedCollection nestedLocale = persist({
         "key": "other",
         "key2": "nestedValue2"
       });       
-      PersistentMap locale = persist({
+      PersistentIndexedCollection locale = persist({
         "key2": "value2",
         "key": "otherValue",
         "nested": nestedLocale
@@ -136,16 +136,16 @@ main() {
     });
 
     test("should have method getLocale which parse . in string", () {
-      PersistentMap nestedLocale2 = persist({
+      PersistentIndexedCollection nestedLocale2 = persist({
         "key": "nested2value",
         "key2": "nestedValue2"
       });       
-      PersistentMap nestedLocale = persist({
+      PersistentIndexedCollection nestedLocale = persist({
         "key": "other",
         "key2": "nestedValue2",
         "nested2": nestedLocale2
       });       
-      PersistentMap locale = persist({
+      PersistentIndexedCollection locale = persist({
         "key2": "value2",
         "key": "otherValue",
         "nested": nestedLocale
@@ -157,7 +157,7 @@ main() {
     });
 
     test("should return only global when method getLocale don't found locale", () {
-      PersistentMap locale = persist({
+      PersistentIndexedCollection locale = persist({
         "key2": "value2",
         "key": "otherValue",
         "global": {
@@ -171,15 +171,15 @@ main() {
     });
 
     test("should add global to locale got by getLocale", () {
-      PersistentMap global = persist({
+      PersistentIndexedCollection global = persist({
         "global": "other",
         "global2": "nestedValue2",
       });       
-      PersistentMap nested = persist({
+      PersistentIndexedCollection nested = persist({
         "nested": "other",
         "nested2": "nestedValue2",
       });       
-      PersistentMap locale = persist({
+      PersistentIndexedCollection locale = persist({
         "key2": "value2",
         "key": "otherValue",
         "nested": nested,
