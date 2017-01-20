@@ -1,5 +1,5 @@
 name: flux_i18n
-version: 0.2.0
+version: 0.2.1
 description: Localization for flux library.
 dependencies:
   browser: any

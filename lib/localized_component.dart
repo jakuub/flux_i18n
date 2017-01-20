@@ -38,7 +38,7 @@ class LocalizedComponent extends Component<PersistentIndexedCollection> {
     }
 
     return placeholders.keys.fold(locale, (previous, key) =>
-        locale.replaceAll(
+        previous.replaceAll(
             placeholderStart + key + placeholderEnd, placeholders[key]));
   }
 
